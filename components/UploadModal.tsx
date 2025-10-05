@@ -2,12 +2,20 @@
 import useUploadModal from "@/hooks/useUploadModal"
 import Modal from "./Modal"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { toast } from 'react-hot-toast'
 import { useState } from "react"
+import { useUser } from "@/hooks/useUser"
+import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useRouter } from "next/navigation"
 import Input from "./Input"
 import Button from "./Button"
+import uniqid from "uniqid"
 
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const { user } = useUser()
+  const router = useRouter()
+  const supabaseClient = useSupabaseClient()
   const uploadModal = useUploadModal()
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
@@ -25,8 +33,64 @@ const UploadModal = () => {
     }
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = (values) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+    try {
+      setIsLoading(true)
 
+      const imageFile = values.image?.[0]
+      const songFile = values.song?.[0]
+
+      if (!imageFile || !songFile || !user)  {
+        toast.error('Missing fields')
+        setIsLoading(false)
+        return
+      }
+
+      const uniqueID = uniqid()
+      const {data: songData, error: songError} = await supabaseClient.storage.from('songs').upload(`song-${values.title}-${uniqueID}`, songFile, {
+        upsert: false,
+        cacheControl: '3600',
+      })
+
+      if(songError) {
+        setIsLoading(false)
+        return toast.error(songError.message)
+      }
+
+      // upload image
+      const {data: imageData, error: imageError} = await supabaseClient.storage.from('images').upload(`image-${values.title}-${uniqueID}`, imageFile, {
+        upsert: false,
+        cacheControl: '3600',
+      })
+
+      if(imageError) {
+        setIsLoading(false)
+        return toast.error(imageError.message)
+      }
+
+      const {error: supabaseError} = await supabaseClient.from('songs').insert({
+        user_id: user.id,
+        title: values.title,
+        author: values.author,
+        image_path: imageData.path,
+        song_path: songData.path,
+      })
+
+      if(supabaseError) {
+        setIsLoading(false)
+        return toast.error(supabaseError.message)
+      }
+
+      router.refresh()
+      setIsLoading(false)
+      toast.success('Song created')
+      reset()
+      uploadModal.onClose()
+    } catch (error) {
+      toast.error('Something went wrong')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
