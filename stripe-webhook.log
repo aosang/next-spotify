@@ -1,0 +1,12 @@
+Checking for new versions...
+
+Getting ready...
+Ready! You are using Stripe API Version [2025-05-28.basil]. Your webhook signing secret is whsec_2877cfb8c3f02cb84f3176eb6c11b6cd0f97c5dfdd3ed63b586c32d190ecc0a8 (^C to quit)
+2025-10-07 15:37:06   --> product.created [evt_1SFVSIFpdtCmQBszo9cufnHb]
+2025-10-07 15:37:07   --> plan.created [evt_1SFVSJFpdtCmQBszYmURTkYy]
+2025-10-07 15:37:07   --> price.created [evt_1SFVSJFpdtCmQBszdQJxBuxk]
+2025-10-07 15:37:07  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSJFpdtCmQBszYmURTkYy]
+2025-10-07 15:37:08   --> product.updated [evt_1SFVSKFpdtCmQBszsmQIpNuk]
+2025-10-07 15:37:08  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSIFpdtCmQBszo9cufnHb]
+2025-10-07 15:37:08  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSJFpdtCmQBszdQJxBuxk]
+2025-10-07 15:37:09  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSKFpdtCmQBszsmQIpNuk]
