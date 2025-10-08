@@ -10,3 +10,4 @@ Ready! You are using Stripe API Version [2025-05-28.basil]. Your webhook signing
 2025-10-07 15:37:08  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSIFpdtCmQBszo9cufnHb]
 2025-10-07 15:37:08  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSJFpdtCmQBszdQJxBuxk]
 2025-10-07 15:37:09  <--  [200] POST http://localhost:3000/api/webhooks [evt_1SFVSKFpdtCmQBszsmQIpNuk]
+Session expired, reconnecting...

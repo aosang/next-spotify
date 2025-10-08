@@ -8,7 +8,9 @@ import UserProvider from '@/providers/userProvider'
 import ModalProvider from '@/providers/ModalProvider'
 import ToasterProvider from '@/providers/ToasterProvider'
 import getSongsByUserId from '@/actions/getSongsByUserId'
-const font = Figtree({ subsets: ['latin'] })
+import getActiveProductsWithPrices from '@/actions/getActiveProductsWithPrices'
+
+
 
 export const metadata: Metadata = {
   title: 'Sportify Music',
@@ -23,13 +25,14 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const userSongs = await getSongsByUserId()
+  const products = await getActiveProductsWithPrices()
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body>
         <ToasterProvider />
         <SupabaseProvider>
           <UserProvider>
-            <ModalProvider />
+            <ModalProvider products={products} />
             <Sidebar songs={userSongs}>
               {children}
             </Sidebar>
